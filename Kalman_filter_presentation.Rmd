@@ -1,0 +1,31 @@
+---
+title: "Kalman filter"
+author: "Klinkenberg"
+date: "2 March 2017"
+output: 
+  ioslides_presentation:
+    logo: images/logo_uva.png
+    smaller: FALSE
+    css: css/style.css
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## TOC
+
+# Overview
+
+## What does the Kalman filter do?
+
+## Chart
+
+## One variable
+
+## Multiple variables
+
+# END
+
+<img src="https://g.twimg.com/Twitter_logo_white.png" style="width:20px">  <a href="https://twitter.com/shklinkenberg" target="_blank" style="color:inherit; border-bottom:none; ">@shklinkenberg</a>
