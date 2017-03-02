@@ -1,0 +1,52 @@
+graph TB
+
+    A["Original error estimate"]
+    B["Error in estimate"]
+    C["Calculate Kalman gain"]
+    D["Error in data (measurement)"]
+    E["Calculate current estimate"]
+    F["Calculate new error in estimate"]
+    G["Updates estimate"]
+    H["Previous estimate"]
+    I["Measured values"]
+    J["Original estimate"]
+    K["Data input"]
+
+    subgraph 
+    A
+    J
+    K
+    end
+    
+    subgraph
+    B
+    D
+    H
+    I
+    end
+    
+    subgraph
+    C
+    E
+    F
+    end
+    
+    subgraph 
+    G
+    end
+    
+    A-->B   
+    J-->H
+    K-->I
+    
+    B-->C
+    D-->C
+    H-->C
+    I-->C
+
+    C-->E
+    C-->H
+    E-->F
+    F-->B
+    E-->G
+
