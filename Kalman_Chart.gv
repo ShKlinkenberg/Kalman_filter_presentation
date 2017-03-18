@@ -1,0 +1,52 @@
+digraph Kalman {
+
+
+# nodeEdge0 [fixedsize=true, shape=diamond, label=".Nojjjj label.", fillcolor=red, style=filled]
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10, layout = dot]
+
+  # several 'node' statements
+  node [shape = box, fontname = Helvetica, fillcolor = red, style=filled, fontcolor=white]
+  
+  OEE [label = 'Original error estimate']
+  EE  [label = 'Error in estimate']
+  KG  [label = 'Calculate Kalman gain']
+  ED  [label = 'Error in data (measurement)']
+  CCE [label = 'Calculate current estimate']
+  CNE [label = 'Calculate new error in estimate']
+  UE  [label = 'Updates estimate']
+  PE  [label = 'Previous estimate']
+  MV  [label = 'Measured values']
+  OE  [label = 'Original estimate']
+  DI  [label = 'Data input']
+ 
+subgraph {
+rank = same; OEE; OE; DI;
+}
+
+subgraph {
+rank = same; EE; ED; PE; MV;
+}
+
+subgraph {
+rank = same; KG: CCE; CNE;
+}
+
+  # several 'edge' statements
+  edge [color = grey]
+    OEE->EE   
+    OE->PE
+    DI->MV
+    
+    EE->KG
+    ED->KG
+    PE->KG
+    MV->KG
+
+    KG->CCE
+    KG->PE
+    CCE->CNE
+    CNE->EE
+    CCE->UE
+}
