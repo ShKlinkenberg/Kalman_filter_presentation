@@ -4,7 +4,7 @@ digraph Kalman {
 # nodeEdge0 [fixedsize=true, shape=diamond, label=".Nojjjj label.", fillcolor=red, style=filled]
 
   # a 'graph' statement
-  graph [overlap = true, fontsize = 10, layout = dot]
+  graph [overlap = true, fontsize = 10, layout = dot, splines=ortho, style=rounded]
 
   # several 'node' statements
   node [shape = box, fontname = Helvetica, fillcolor = red, style=filled, fontcolor=white]
@@ -22,15 +22,23 @@ digraph Kalman {
   DI  [label = 'Data input']
  
 subgraph {
-rank = same; OEE; OE; DI;
+rank = source; OEE; OE; DI;
 }
 
 subgraph {
-rank = same; EE; ED; PE; MV;
+rank = same; rankdir = LR; EE; ED; PE; MV;
 }
 
 subgraph {
-rank = same; KG: CCE; CNE;
+rank = same; EE; ED;
+}
+
+subgraph {
+rank = same; PE; MV;
+}
+
+subgraph {
+rank = max; rankdir = LR;  KG: CCE; CNE;
 }
 
   # several 'edge' statements
