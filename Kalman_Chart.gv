@@ -14,7 +14,7 @@ digraph Kalman {
   KG  [label = 'Calculate Kalman gain']
   ED  [label = 'Error in data (measurement)']
   CCE [label = 'Calculate current estimate']
-  CNE [label = 'Calculate new error in estimate']
+  CNE [label = 'Update error in estimate']
   UE  [label = 'Updates estimate']
   PE  [label = 'Previous estimate']
   MV  [label = 'Measured values']
