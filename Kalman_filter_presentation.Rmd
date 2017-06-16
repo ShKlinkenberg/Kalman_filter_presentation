@@ -10,10 +10,6 @@ output:
     self_contained: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
 ## TOC
 
 # Overview
@@ -25,6 +21,10 @@ knitr::opts_chunk$set(echo = FALSE)
 **Kalman filtering**, also known as **linear quadratic estimation** (LQE), is an algorithm that uses a series of measurements observed over time, containing statistical noise and other inaccuracies, and produces estimates of unknown variables that tend to be more accurate than those based on a single measurement alone, by using Bayesian inference and estimating a joint probability distribution over the variables for each timeframe. The filter is named after Rudolf E. Kálmán, one of the primary developers of its theory.
 
 [Source: WIKIPEDIA](https://en.wikipedia.org/wiki/Kalman_filter)
+
+## See it in action {}
+
+<iframe style="height:450px;" src="https://www.youtube.com/embed/0GSIKwfkFCA" frameborder="0" allowfullscreen></iframe>
 
 ## Basic concept
 
@@ -38,7 +38,7 @@ library('DiagrammeR')
 grViz("Kalman_Chart.gv")
 ```
 
-## Variable $ Functions
+## Variable Functions
 
 * Original error estimate
 * Error in estimate
@@ -49,7 +49,71 @@ grViz("Kalman_Chart.gv")
 * Calculate new error in estimate
 * Updates estimate
 
-## Multiple variables
+## Original estimate
+
+* Original estimate
+* Original error in estimate
+
+```{r}
+original.estimate <- 4
+original.error    <- 2
+```
+
+## Error in estimate
+
+```{r}
+current.estimate <- original.estimate
+current.error    <- original.error
+```
+
+## Kalman gain
+
+$\text{kalman gain} = KG = \frac{E_{EST}}{E_{EST} + E_{MEA}}$
+
+```{r, eval=FALSE, echo=TRUE}
+kalman.gain = current.error / ( current.error + measured.error )
+```
+
+## Update estimate
+
+$\text{measurement} = MEA$
+
+```{r, eval=FALSE}
+previous.estimate <- current.estimate
+```
+
+
+* $\text{current estimate} = EST_t$ 
+* $\text{previous estimate} = EST_{t-1}$
+
+$$EST_t = EST_{t-1} + KG [MEA - EST_{t-1} ]$$
+
+```{r, eval=FALSE, echo=TRUE}
+current.estimate = previous.estimate + kalman.gain * (measurement - previous.estimate)
+```
+
+## Update error in estimate
+
+$$E_{EST_t} = \frac{E_{MEA}E_{EST_{t-1}}}{E_{MEA}+E_{EST_{t-1}}} \Rightarrow [1-KG] E_{EST_{t-1}}$$
+
+```{r, eval=FALSE}
+current.error = ( measured.error * previous.error ) / 
+                ( measured.error + previous.error )
+```
+
+```{r, eval=FALSE}
+current.error = (1 - kalman.gain) * previous.error
+```
+
+## Example
+
+```{r, eval=FALSE}
+
+```
+
+## Used resource
+
+<iframe style="height:450px;" src="https://www.youtube.com/embed/videoseries?list=PLX2gX-ftPVXU3oUFNATxGXY90AULiqnWT" frameborder="0" allowfullscreen></iframe>
 
 # END
 
