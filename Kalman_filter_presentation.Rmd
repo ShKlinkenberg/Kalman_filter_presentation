@@ -12,6 +12,8 @@ output :
 
 # Overview
 
+<span style="color:white;">Source: <a  style="color:white;" href="https://github.com/ShKlinkenberg/Kalman_filter_presentation"><i class="fab fa-github fa-lg fa-spin"></i></a></span>
+
 ## What does the Kalman filter do? {.smaller}
 
 <img style="filter: grayscale(70%); float:left; height:150px; margin:0 20px 30px 0;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Rudolf_Kalman.jpg/220px-Rudolf_Kalman.jpg">
@@ -23,6 +25,8 @@ output :
 The Kalman filter assumes that variables are random and Gaussian distributed. Each variable has a mean value $\mu$, which is the center of the random distribution, and a variance $\sigma^2$, which is the uncertainty.
 
 [Source: Bzarg](http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/)
+
+Also Kalman filtering assume the error in the measurement to be known and to be constant.
 
 ## See it in action
 
@@ -60,7 +64,7 @@ kalman.gain = current.estimate.error / ( current.estimate.error + current.measur
 * $\text{current estimate} = EST_t$ 
 * $\text{previous estimate} = EST_{t-1}$
 
-$$EST_t = EST_{t-1} + KG [MEA - EST_{t-1} ]$$
+$${EST}_t = {EST}_{t-1} + KG [MEA - {EST}_{t-1} ]$$
 
 ```{r, eval=FALSE, echo=TRUE}
 current.estimate = previous.estimate + kalman.gain * (measurement - previous.estimate)
@@ -140,6 +144,7 @@ KalmanFilter(current.estimate, current.estimate.error, current.measurement, curr
 ```{r, warning=FALSE}
 current.estimate          <- 15
 current.estimate.error    <- 1
+current.measurement.error <- 2
 
 mu.temp    <- rep(c(15,20,25), each=20)
 sigma.temp <- rep(c(2,6,1),    each=20)
