@@ -147,7 +147,7 @@ current.estimate.error    <- 1
 current.measurement.error <- 2
 
 mu.temp    <- rep(c(15,20,25), each=20)
-sigma.temp <- rep(c(2,6,1),    each=20)
+sigma.temp <- rep(c(2,1,1),    each=20)
 
 temperatures <- rnorm(length(mu.temp),mu.temp, sigma.temp)
 n            <- length(temperatures)
@@ -189,7 +189,7 @@ segments(1:60, results$estimate-results$error, 1:60, results$estimate+results$er
 
 ## Results {.flexbox .vcenter}
 
-```{r, echo=F, fig.show='animate', ffmpeg.format='gif', dev='jpeg', interval=.1}
+```{r, eval=T, echo=F, fig.show='animate', ffmpeg.format='gif', dev='jpeg', interval=.1}
 # results
 
 for(i in 1:60) {
