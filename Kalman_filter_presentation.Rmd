@@ -7,7 +7,7 @@ output :
     logo           : https://shklinkenberg.github.io/uva_style/images/logo_uva.png
     smaller        : FALSE
     css            : https://shklinkenberg.github.io/uva_style/ioslides_style.css
-    self_contained : true
+    self_contained : TRUE
 ---
 
 # Overview
@@ -82,14 +82,14 @@ current.estimate.error = (1 - kalman.gain) * previous.error
 ## {.smaller}
 
 ```{r}
-KalmanFilter <- function(current.estimate, current.estimate.error, current.measurment, current.measurement.error) {
+KalmanFilter <- function(current.estimate, current.estimate.error, current.measurement, current.measurement.error) {
   # Apply Kalman filter. Calculates new estimate
   # and error of estimation
   #
   # Args:
   #   current.estimate          : Current estimation of the variable of interest
   #   current.estimate.error    : Current error in the estimation
-  #   current.measurment        : Measured value
+  #   current.measurement       : Measured value
   #   current.measurement.error : Constant error of measurement instrument
   #
   # Returns:
@@ -100,7 +100,7 @@ KalmanFilter <- function(current.estimate, current.estimate.error, current.measu
   kalman.gain = current.estimate.error / ( current.estimate.error + current.measurement.error )
   
   # Update estimate
-  updated.estimate = current.estimate + kalman.gain * (current.measurment - current.estimate)
+  updated.estimate = current.estimate + kalman.gain * (current.measurement - current.estimate)
   
   # Update error in estimate
   updated.estimate.error = (1 - kalman.gain) * current.estimate.error
@@ -123,7 +123,7 @@ Use Kalman filter to estimate the true temperatur of 72 degrees F with error of 
 * Original error in estimate
 
 ```{r}
-current.measurment        <- 75
+current.measurement       <- 75
 current.measurement.error <- 4
 current.estimate          <- 68
 current.estimate.error    <- 2
@@ -132,27 +132,33 @@ current.estimate.error    <- 2
 ## Apply Kalman filter once
 
 ```{r, eval=TRUE}
-KalmanFilter(current.estimate, current.estimate.error, current.measurment, current.measurement.error) 
+KalmanFilter(current.estimate, current.estimate.error, current.measurement, current.measurement.error) 
 ```
 
 ## Apply Kalman filter {.smaller}
 
-```{r}
-temperatures <- c(75, 71, 70, 74)
+```{r, warning=FALSE}
+current.estimate          <- 15
+current.estimate.error    <- 1
+
+mu.temp    <- rep(c(15,20,25), each=20)
+sigma.temp <- rep(c(2,6,1),    each=20)
+
+temperatures <- rnorm(length(mu.temp),mu.temp, sigma.temp)
 n            <- length(temperatures)
 
 # Store results
-results <- matrix(NA, n, 3)
+results <- data.frame(mu.temp, sigma.temp, temperatures, estimate = NA, error = NA)
 
 for (i in 1:n) {
   
   # Set current measurement
-  current.measurment <- temperatures[i]
+  current.measurement <- temperatures[i]
   
   # Store result
-  results[i,] <- c(current.measurment, current.estimate, current.estimate.error)
+  results[i,c('estimate', 'error')] <- c(current.estimate, current.estimate.error)
   
-  kalman.filter.results <- KalmanFilter(current.estimate, current.estimate.error, current.measurment, current.measurement.error)
+  kalman.filter.results <- KalmanFilter(current.estimate, current.estimate.error, current.measurement, current.measurement.error)
 
   current.estimate          <- kalman.filter.results$updated.estimate
   current.estimate.error    <- kalman.filter.results$updated.estimate.error
@@ -160,10 +166,42 @@ for (i in 1:n) {
 }
 ```
 
-## Results
 
-```{r}
-results
+```{r, echo=F, eval=FALSE}
+# results
+
+# Plot mu temperatures
+plot(ts(mu.temp), col = 'blue', ylab='temp', ylim=c(10,30))
+
+# Plost sigma temperatures
+polygon(c(1:60, rev(1:60)),c(mu.temp-sigma.temp, rev(mu.temp+sigma.temp)), col = rgb(0,0,1,.25), lty = 'blank')
+
+# Plot estimate temperaturs
+lines(ts(results$estimate), col = 'red')
+
+segments(1:60, results$estimate-results$error, 1:60, results$estimate+results$error, col = rgb(1,0,0,.75), lwd = 3)
+```
+
+## Results {.flexbox .vcenter}
+
+```{r, echo=F, fig.show='animate', ffmpeg.format='gif', dev='jpeg', interval=.1}
+# results
+
+for(i in 1:60) {
+
+# Plot mu temperatures
+plot(ts(mu.temp), col = 'blue', ylab='temp', ylim=c(10,30))
+
+# Plost sigma temperatures
+polygon(c(1:60, rev(1:60)),c(mu.temp-sigma.temp, rev(mu.temp+sigma.temp)), col = rgb(0,0,1,.25), lty = 'blank')
+
+# Plot estimates
+lines(results$estimate[1:i], col = 'red')
+
+# Plot error
+segments(1:i, results$estimate[1:i]-results$error[1:i], 1:i, results$estimate[1:i]+results$error[1:i], col = rgb(1,0,0,.75), lwd = 3)
+
+}
 ```
 
 # Comparisons
@@ -176,7 +214,7 @@ Kalman gain      | $EST_t = EST_{t-1} + KG [MEA - EST_{t-1} ]$                |
 Gradient descent | $b_t = b_{t-1} + LR (Y - \hat{Y})$                         |
 Elo rating       | $\text{Rating}_t = \text{Rating}_{t-1} + K (S - \hat{S} )$ |
 
-## Used resource
+## Youtube resource
 
 <iframe style="height:450px;" src="https://www.youtube.com/embed/videoseries?list=PLX2gX-ftPVXU3oUFNATxGXY90AULiqnWT" frameborder="0" allowfullscreen></iframe>
 
